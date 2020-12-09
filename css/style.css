@@ -1,4 +1,19 @@
 body {
-  background-color: none;
+  background-color: teal;
+}
+
+h1 {
+  font-size: 32px;
+}
+
+td, th {
+  margin: auto;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+#salmon-table {
+  margin: auto;
+  background-color: salmon;
 }
 
