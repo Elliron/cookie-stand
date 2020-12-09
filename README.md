@@ -11,3 +11,5 @@ Carly Dekock
 Anthony Johnson
 Ryan Gallaway
 Lauren Sierra
+Jason Dormier
+Nico Ryan

@@ -2,192 +2,85 @@
 
 //global variables
 var hours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
-var mySeattle = document.getElementById('seattle');
-var myTokyo = document.getElementById('tokyo');
-var myParis = document.getElementById('paris');
-var myDubai = document.getElementById('dubai');
-var myLima = document.getElementById('lima');
+var allStores = [];
+var salmonTable = document.getElementById('salmon-table');
 
-// console.log(mySeattle);
+// Constructor Functions
 
-//1st object - get it to work
+function Store(name, min, max, avg) {
+  this.name = name;
+  this.min = min;
+  this.max = max;
+  this.avg = avg;
+  this.hourlySales = [];
+  this.dailyTotal = 0;
+  allStores.push(this);
+}
 
-var seattleStore = {
-  name: 'Seattle',
-  min: 23,
-  max: 65,
-  avg: 6.3,
-  hourlySales: [],
-  dailyTotal: 0,
-  //successfully get random number between min and max
-  getRandomNumber: function () {
-    return Math.floor(Math.random() * (this.max - this.min + 1) + this.min);
-  },
+//random number generator
+Store.prototype.getRandomNumber = function () {
+  return Math.floor(Math.random() * (this.max - this.min + 1) + this.min);
+};
 
-  //populate hourlySales array
-  calculateHourlySales() {
-    // console.log(this.getRandomNumber());
-    for (var i = 0; i < hours.length; i++) {
-      // var calcSales = this.getRandomNumber() * this.avg;
-      var calcSalesRound = Math.ceil(this.getRandomNumber() * this.avg);
-      this.hourlySales[i] = calcSalesRound;
-      this.dailyTotal += calcSalesRound;
-    }
-  },
-  //render my list with total at the end
-  render: function () {
-    this.calculateHourlySales();
-    // console.log(seattleStore);
-    for (var i = 0; i < this.hourlySales.length; i++) {
-      //proof I can get here
-      // console.log('inside render method');
-      var liElement = document.createElement('li');
-      // liElement.textContent = this.hours;
-      liElement.textContent = `${hours[i]} ${this.hourlySales[i]} cookies`;
-      mySeattle.appendChild(liElement);
-    }
-    liElement = document.createElement('li');
-    liElement.textContent = ` ${this.dailyTotal} total`;
-    mySeattle.appendChild(liElement);
+//populate hourlySales array
+Store.prototype.calculateHourlySales = function () {
+  for (var i = 0; i < hours.length; i++) {
+    var calcSalesRound = Math.ceil(this.getRandomNumber() * this.avg);
+    this.hourlySales[i] = calcSalesRound;
+    this.dailyTotal += calcSalesRound;
   }
 };
 
-//2 object - get it to work
-
-var tokyoStore = {
-  name: 'Tokyo',
-  min: 3,
-  max: 24,
-  avg: 1.2,
-  hourlySales: [],
-  dailyTotal: 0,
-
-  getRandomNumber: function () {
-    return Math.floor(Math.random() * (this.max - this.min + 1) + this.min);
-  },
-  calculateHourlySales() {
-    for (var i = 0; i < hours.length; i++) {
-      var calcSalesRound = Math.ceil(this.getRandomNumber() * this.avg);
-      this.hourlySales[i] = calcSalesRound;
-      this.dailyTotal += calcSalesRound;
-    }
-  },
-  render: function () {
-    this.calculateHourlySales();
-    for (var i = 0; i < this.hourlySales.length; i++) {
-      console.log('inside render method');
-      var liElement = document.createElement('li');
-      myTokyo.appendChild(liElement);
-      liElement.textContent = `${hours[i]} ${this.hourlySales[i]} cookies`;
-    }
-    liElement = document.createElement('li');
-    liElement.textContent = ` ${this.dailyTotal} total`;
-    myTokyo.appendChild(liElement);
+//prototype methods
+Store.prototype.renderRow = function () {
+  this.calculateHourlySales();
+  var trElement = document.createElement('tr');
+  salmonTable.appendChild(trElement);
+  var thElement = document.createElement('th');
+  thElement.textContent = this.name;
+  trElement.appendChild(thElement);
+  for (var i = 0; i < this.hourlySales.length; i++) {
+    var tdElement = document.createElement('td');
+    tdElement.textContent = this.hourlySales[i];
+    trElement.appendChild(tdElement);
   }
+  tdElement = document.createElement('td');
+  tdElement.textContent = this.dailyTotal;
+  trElement.appendChild(tdElement);
 };
 
-// //3rd object - get it to work
-var parisStore = {
-  name: 'Paris',
-  min: 20,
-  max: 38,
-  avg: 2.3,
-  hourlySales: [],
-  dailyTotal: 0,
-
-  getRandomNumber: function () {
-    return Math.floor(Math.random() * (this.max - this.min + 1) + this.min);
-  },
-  calculateHourlySales() {
-    for (var i = 0; i < hours.length; i++) {
-      var calcSalesRound = Math.ceil(this.getRandomNumber() * this.avg);
-      this.hourlySales[i] = calcSalesRound;
-      this.dailyTotal += calcSalesRound;
-    }
-  },
-  render: function () {
-    this.calculateHourlySales();
-    for (var i = 0; i < this.hourlySales.length; i++) {
-      console.log('inside render method');
-      var liElement = document.createElement('li');
-      myParis.appendChild(liElement);
-      liElement.textContent = `${hours[i]} ${this.hourlySales[i]} cookies`;
-    }
-    liElement = document.createElement('li');
-    liElement.textContent = ` ${this.dailyTotal} total`;
-    myParis.appendChild(liElement);
+function renderHeader() {
+  var tHead = document.createElement('thead');
+  salmonTable.appendChild(tHead);
+  var trElement = document.createElement('tr');
+  tHead.appendChild(trElement);
+  var thElement = document.createElement('th');
+  thElement.textContent = ('');
+  trElement.appendChild(thElement);
+  for (var i = 0; i < hours.length; i++) {
+    thElement = document.createElement('th');
+    thElement.textContent = (hours[i]);
+    trElement.appendChild(thElement);
   }
-};
-
-// //4th object
-var dubaiStore = {
-  name: 'Dubai',
-  min: 11,
-  max: 38,
-  avg: 3.7,
-  hourlySales: [],
-  dailyTotal: 0,
-  getRandomNumber: function () {
-    return Math.floor(Math.random() * (this.max - this.min + 1) + this.min);
-  },
-  calculateHourlySales() {
-    for (var i = 0; i < hours.length; i++) {
-      var calcSalesRound = Math.ceil(this.getRandomNumber() * this.avg);
-      this.hourlySales[i] = calcSalesRound;
-      this.dailyTotal += calcSalesRound;
-    }
-  },
-  render: function () {
-    this.calculateHourlySales();
-    for (var i = 0; i < this.hourlySales.length; i++) {
-      console.log('inside render method');
-      var liElement = document.createElement('li');
-      myDubai.appendChild(liElement);
-      liElement.textContent = `${hours[i]} ${this.hourlySales[i]} cookies`;
-    }
-    liElement = document.createElement('li');
-    liElement.textContent = ` ${this.dailyTotal} total`;
-    myDubai.appendChild(liElement);
-  }
-};
-
-// //5th object - get it to work
-
-var limaStore = {
-  name: 'Lima',
-  min: 23,
-  max: 65,
-  avg: 6.3,
-  hourlySales: [],
-  dailyTotal: 0,
-  getRandomNumber: function () {
-    return Math.floor(Math.random() * (this.max - this.min + 1) + this.min);
-  },
-  calculateHourlySales() {
-    for (var i = 0; i < hours.length; i++) {
-      var calcSalesRound = Math.ceil(this.getRandomNumber() * this.avg);
-      this.hourlySales[i] = calcSalesRound;
-      this.dailyTotal += calcSalesRound;
-    }
-  },
-  render: function () {
-    this.calculateHourlySales();
-    for (var i = 0; i < this.hourlySales.length; i++) {
-      console.log('inside render method');
-      var liElement = document.createElement('li');
-      myLima.appendChild(liElement);
-      liElement.textContent = `${hours[i]} ${this.hourlySales[i]} cookies`;
-    }
-    liElement = document.createElement('li');
-    liElement.textContent = ` ${this.dailyTotal} total`;
-    myLima.appendChild(liElement);
-  }
-};
+  thElement = document.createElement('th');
+  thElement.textContent = ('Total');
+  trElement.appendChild(thElement);
+}
 
 
-// do the thing
-seattleStore.render();
-tokyoStore.render();
-parisStore.render();
-dubaiStore.render();
-limaStore.render();
+
+//instantiations
+var seattle = new Store('Seattle', 23, 65, 6.3);
+var tokyo = new Store('Tokyo', 3, 24, 1.2);
+var dubai = new Store('Dubai', 11, 38, 3.7);
+var paris = new Store('Paris', 20, 38, 2.3);
+var lima = new Store('Lima', 2, 16, 4.6);
+
+
+//render
+renderHeader();
+seattle.renderRow();
+tokyo.renderRow();
+dubai.renderRow();
+paris.renderRow();
+lima.renderRow();
