@@ -37,6 +37,7 @@ td, th {
 #salmon-table {
   margin: auto;
   background-color: salmon;
+  margin-bottom: 25px;
 }
 
 
@@ -102,3 +103,15 @@ main :nth-child(2) img {
 footer section {
   border: 2px solid black;
 }
+
+form {
+  width: auto;
+  margin: 10px;
+  margin-left: 25%;
+}
+
+button {
+  margin: 10px;
+  margin-left: 65%
+}
+
