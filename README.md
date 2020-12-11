@@ -13,3 +13,5 @@ Ryan Gallaway
 Lauren Sierra
 Jason Dormier
 Nico Ryan
+Brai Frauen
+Chance 
