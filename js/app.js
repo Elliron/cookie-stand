@@ -4,7 +4,7 @@
 var hours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
 var allStores = [];
 var salmonTable = document.getElementById('salmon-table');
-
+var storeForm = document.getElementById('newStoreLoc');
 // Constructor Functions
 
 function Store(name, min, max, avg) {
@@ -16,7 +16,6 @@ function Store(name, min, max, avg) {
   this.dailyTotal = 0;
   allStores.push(this);
 }
-console.log(allStores);
 //random number generator
 Store.prototype.getRandomNumber = function () {
   return Math.floor(Math.random() * (this.max - this.min + 1) + this.min);
@@ -33,7 +32,7 @@ Store.prototype.calculateHourlySales = function () {
 };
 
 //Add Store Form
-var storeForm = document.getElementById('newStoreLoc');
+
 storeForm.addEventListener('submit',
   function handleSubmit(event) {
     event.preventDefault();
@@ -42,7 +41,8 @@ storeForm.addEventListener('submit',
     var max = event.target.max.value;
     var avg = event.target.avg.value;
 
-    new Store(name, min, max, avg);
+    var newStore = new Store(name, min, max, avg);
+    newStore.calculateHourlySales();
     salmonTable.innerHTML = '';
     renderAll();
   }
@@ -50,7 +50,7 @@ storeForm.addEventListener('submit',
 
 //prototype methods
 Store.prototype.renderRow = function () {
-  this.calculateHourlySales();
+  // this.calculateHourlySales();
   var trElement = document.createElement('tr');
   salmonTable.appendChild(trElement);
   var thElement = document.createElement('th');
@@ -87,21 +87,19 @@ function renderHeader() {
 
 // function renderFooter() {
 function calculateStoreTotals() {
-  var strTotals = 0;
   var totalOfTotals = 0;
   var trElement = document.createElement('tr');
   var thElement = document.createElement('th');
   thElement.textContent = 'All Totals';
   trElement.appendChild(thElement);
-  // console.log(this.hourlySales);
   for (var i = 0; i < hours.length; i++) {
-    strTotals = 0;
+    var totalHourTotals = 0;
     for (var j = 0; j < allStores.length; j++) {
-      strTotals += allStores[j].hourlySales[i];
+      totalHourTotals += allStores[j].hourlySales[i];
       totalOfTotals += allStores[j].hourlySales[i];
     }
     thElement = document.createElement('th');
-    thElement.textContent = strTotals;
+    thElement.textContent = totalHourTotals;
     trElement.appendChild(thElement);
   }
   thElement = document.createElement('th');
@@ -118,6 +116,9 @@ new Store('Tokyo', 3, 24, 1.2);
 new Store('Dubai', 11, 38, 3.7);
 new Store('Paris', 20, 38, 2.3);
 new Store('Lima', 2, 16, 4.6);
+for (var i = 0; i < allStores.length; i++) {
+  allStores[i].calculateHourlySales();
+}
 
 //render
 function renderAll() {
